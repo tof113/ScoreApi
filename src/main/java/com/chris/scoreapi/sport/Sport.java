@@ -16,8 +16,8 @@ import javax.persistence.GenerationType;
 public class Sport {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer sport;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private int sport;
     @NonNull
     private String name;
 }
