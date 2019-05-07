@@ -29,6 +29,7 @@ public class UserController {
     @PostMapping(value = "")
     public @ResponseBody User addNewUser(@RequestBody User userDAO){
         User user = userDAO;
+
         return userRepository.save(user);
     }
 }
