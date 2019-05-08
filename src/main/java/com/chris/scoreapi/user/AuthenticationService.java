@@ -1,11 +1,13 @@
 package com.chris.scoreapi.user;
 
+import com.chris.scoreapi.common.exceptions.AuthenticationException;
 import com.chris.scoreapi.common.exceptions.JwtException;
 import com.chris.scoreapi.common.security.JwtClaims;
 import com.chris.scoreapi.common.security.JwtConstants;
 import com.chris.scoreapi.common.security.JwtUtil;
 import com.chris.scoreapi.common.security.PasswordEncrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 import sun.rmi.runtime.Log;
 
@@ -21,16 +23,16 @@ public class AuthenticationService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public JwtResponse login(LoginRequest request) throws FailedLoginException, JwtException {
+    public JwtResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail());
 
         if(user == null){
-            throw new FailedLoginException("email not correct");
+            throw new AuthenticationException("email not correct");
         }
 
         if(!PasswordEncrypt.isPasswordAndHashMatching(request.getPassword(), user.getPassword())){
-            throw new FailedLoginException("password incorrect");
+            throw new AuthenticationException("password incorrect");
         }
         String jwt = generateJwtToken(user);
 
@@ -53,13 +55,13 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
-    private String generateJwtToken(User user) throws JwtException{
+    private String generateJwtToken(User user){
         String jwt = null;
         JwtClaims jwtClaims = new JwtClaims();
         jwtClaims.claim(JwtConstants.JWT_CLAIM_USER_ID, user.getUser());
         jwtClaims.claim(JwtConstants.JWT_CLAIM_EMAIL_ADDRESS, user.getEmail());
-
         return jwt = jwtUtil.sign(jwtClaims, 3600* 24 * 7);
+
 
     }
 }

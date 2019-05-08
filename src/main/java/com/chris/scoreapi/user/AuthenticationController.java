@@ -22,14 +22,7 @@ public class AuthenticationController {
     //-----LOGIN-----
     @PostMapping(value = "/login")
     public ResponseEntity<Object> login(@RequestBody LoginRequest request){
-        try{
-            return new ResponseEntity<>(authenticationService.login(request), HttpStatus.ACCEPTED);
-        }catch(FailedLoginException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
-        }catch (JwtException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        return new ResponseEntity<>(authenticationService.login(request), HttpStatus.ACCEPTED);
     }
 
     //-----SIGNUP-----
@@ -40,6 +33,5 @@ public class AuthenticationController {
         }catch(IllegalArgumentException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
-
     }
 }

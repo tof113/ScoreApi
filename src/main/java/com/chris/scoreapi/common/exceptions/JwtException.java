@@ -1,6 +1,6 @@
 package com.chris.scoreapi.common.exceptions;
 
-public class JwtException extends Exception{
+public class JwtException extends RuntimeException{
     public JwtException(){}
 
     public JwtException(String message){
