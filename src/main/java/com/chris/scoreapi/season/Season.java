@@ -1,6 +1,5 @@
-package com.chris.scoreapi.user;
+package com.chris.scoreapi.season;
 
-import com.chris.scoreapi.common.entity.BaseEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -9,29 +8,31 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @Entity
-public class User extends BaseEntity {
+public class Season {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user;
+    private int season;
 
     @NonNull
-    private String lastName;
+    private int club;
 
     @NonNull
-    private String firstName;
+    private String name;
+
+    private String description;
 
     @NonNull
-    private String email;
+    private LocalDateTime startDate;
 
-    @NonNull
-    private String password;
+    private LocalDateTime endDate;
 
-    @NonNull
-    private boolean admin;
 
 }
+
+

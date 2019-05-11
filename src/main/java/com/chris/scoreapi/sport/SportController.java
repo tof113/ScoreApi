@@ -12,25 +12,28 @@ import java.util.List;
 public class SportController {
 
     @Autowired
-    private SportRepository sportRepository;
-
+    private SportService sportService;
 
     //----GET----
     @GetMapping(value = "/all")
-    public @ResponseBody Iterable<Sport> getSports(){
-        return sportRepository.findAll();
+    public @ResponseBody Iterable<SportResponse> getSports(){
+        Iterable<Sport> sports = sportService.getSports();
+
+        //TODO transform sport->SportResponse
+        return null;
+
     }
 
     @GetMapping(value = "")
-    public @ResponseBody Sport getSport(@RequestParam String name){
-        return sportRepository.findByName(name);
+    public @ResponseBody SportResponse getSport(@RequestParam String name){
+        return new SportResponse(sportService.getSport(name));
     }
 
     //----POST-----
     //TODO : USE DAO to communicate with FE
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public @ResponseBody Sport addNewSport(@RequestBody Sport sportDao){
-        Sport sport = sportDao;
-        return sportRepository.save(sport);
+    public @ResponseBody SportResponse addNewSport(@RequestBody SportRequest request){
+
+        return new SportResponse(sportService.addSport(request));
     }
 }

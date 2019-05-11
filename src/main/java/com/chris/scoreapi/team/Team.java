@@ -1,4 +1,5 @@
-package com.chris.scoreapi.user;
+package com.chris.scoreapi.team;
+
 
 import com.chris.scoreapi.common.entity.BaseEntity;
 import lombok.Data;
@@ -13,25 +14,21 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @Entity
-public class User extends BaseEntity {
+public class Team extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user;
+    private int team;
 
     @NonNull
-    private String lastName;
+    private int club;
 
     @NonNull
-    private String firstName;
+    private String name;
 
-    @NonNull
-    private String email;
+    private String description;
 
-    @NonNull
-    private String password;
+    private String photo;
 
-    @NonNull
-    private boolean admin;
 
 }
