@@ -1,14 +1,14 @@
 package com.chris.scoreapi.user;
 
+import com.chris.scoreapi.club.Club;
 import com.chris.scoreapi.common.entity.BaseEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -33,5 +33,14 @@ public class User extends BaseEntity {
 
     @NonNull
     private boolean admin;
+
+    //Relation many-to-many with Club
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "User_Club",
+            joinColumns = {@JoinColumn(name = "user")},
+            inverseJoinColumns = {@JoinColumn(name = "club")}
+    )
+    private Set<Club> clubs = new HashSet<>();
 
 }

@@ -1,15 +1,17 @@
 package com.chris.scoreapi.player;
 
 
+import com.chris.scoreapi.club.Club;
 import com.chris.scoreapi.common.entity.BaseEntity;
+import com.chris.scoreapi.team.Team;
+import com.chris.scoreapi.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -21,12 +23,19 @@ public class Player extends BaseEntity {
     private int player;
 
     @NonNull
-    private int club;
-
-    @NonNull
     private String name;
 
     private String description;
 
     private String photo;
+
+    //Relation Many-to-one to Club
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name="club")
+    private Club club;
+
+    //Relation many-to-many with Team
+    @ManyToMany(mappedBy = "players")
+    private Set<Team> teams = new HashSet<>();
 }

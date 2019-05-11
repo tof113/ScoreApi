@@ -1,14 +1,19 @@
 package com.chris.scoreapi.club;
 
 import com.chris.scoreapi.common.entity.BaseEntity;
+import com.chris.scoreapi.game.Game;
+import com.chris.scoreapi.player.Player;
+import com.chris.scoreapi.season.Season;
+import com.chris.scoreapi.sport.Sport;
+import com.chris.scoreapi.team.Team;
+import com.chris.scoreapi.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -25,4 +30,31 @@ public class Club extends BaseEntity {
     private String description;
 
     private String photo;
+
+    //Relation many-to-many with User
+    @ManyToMany(mappedBy = "clubs")
+    private Set<User> users = new HashSet<>();
+
+    //Relation many-to-many with Sport
+    @ManyToMany(mappedBy = "clubs")
+    private Set<Sport> sports = new HashSet<>();
+
+    //Relation One-to-Many with Player
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    private Set<Player> players;
+
+    //Relation One-to-Many with Team
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    private Set<Team> teams;
+
+    //Relation One-to-Many with Season
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    private Set<Season> seasons;
+
+    //Relation One-to-Many with Game
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    private Set<Game> games;
+
+
+
 }

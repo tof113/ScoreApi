@@ -1,15 +1,16 @@
 package com.chris.scoreapi.game;
 
 
+import com.chris.scoreapi.club.Club;
 import com.chris.scoreapi.common.entity.BaseEntity;
+import com.chris.scoreapi.season.Season;
+import com.chris.scoreapi.sport.Sport;
+import com.chris.scoreapi.team.Team;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,11 +22,35 @@ public class Game extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int game;
 
+    //Relation Many-to-one to Club
     @NonNull
-    private int team1;
+    @ManyToOne
+    @JoinColumn(name="club")
+    private Club club;
 
+    //Relation Many-to-one to Club
     @NonNull
-    private int team2;
+    @ManyToOne
+    @JoinColumn(name="sport")
+    private Sport sport;
+
+    //Relation Many-to-one to Team
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name="team1")
+    private Team team1;
+
+    //Relation Many-to-one to Team
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name="team2")
+    private Team team2;
+
+    //Relation Many-to-one to Season
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name="season")
+    private Season season;
 
     private int score1;
 
@@ -33,5 +58,5 @@ public class Game extends BaseEntity {
 
     private LocalDateTime gameDate;
 
-    private int season;
+
 }
