@@ -4,9 +4,11 @@ import com.chris.scoreapi.user.AuthenticationService;
 import com.chris.scoreapi.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -37,8 +39,8 @@ public class SportController {
     //----POST-----
     //TODO : USE DAO to communicate with FE
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public @ResponseBody SportResponse addNewSport(@RequestBody SportRequest request){
-        //User user = authenticationService.getCurrentUser();
+    public @ResponseBody SportResponse addNewSport( @RequestBody SportRequest request){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new SportResponse(sportService.addSport(request));
     }
 }
