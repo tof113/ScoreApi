@@ -1,11 +1,9 @@
 package com.chris.scoreapi.user;
 
+import com.chris.scoreapi.common.Translator;
 import com.chris.scoreapi.common.exceptions.AuthenticationException;
 import com.chris.scoreapi.common.exceptions.JwtException;
-import com.chris.scoreapi.common.security.JwtClaims;
-import com.chris.scoreapi.common.security.JwtConstants;
-import com.chris.scoreapi.common.security.JwtUtil;
-import com.chris.scoreapi.common.security.PasswordEncrypt;
+import com.chris.scoreapi.common.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,12 +18,10 @@ public class AuthenticationService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private JwtUtil jwtUtil;
 
-    public JwtResponse login(LoginRequest request) {
+    public User signin(LoginRequest request) {
 
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(request.getUsername());
 
         if(user == null){
             throw new AuthenticationException("email not correct");
@@ -34,9 +30,7 @@ public class AuthenticationService {
         if(!PasswordEncrypt.isPasswordAndHashMatching(request.getPassword(), user.getPassword())){
             throw new AuthenticationException("password incorrect");
         }
-        String jwt = generateJwtToken(user);
-
-        return new JwtResponse(jwt);
+        return user;
     }
 
     public User signup(SignUpRequest request) {
@@ -46,21 +40,24 @@ public class AuthenticationService {
             throw new IllegalArgumentException("Email already in use");
         }
         user = new User();
+        user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPassword(PasswordEncrypt.getHashFromString(request.getPassword()));
-        user.setAdmin(true);
+        user.setAdmin(request.isAdmin());
 
         return userRepository.save(user);
     }
 
+    /*public User getCurrentUser(){
+        AppContext appContext = SecurityUtils.appContextAuthentication();
+        if(appContext == null){
+            throw new AuthenticationException(Translator.toLocale("authenticationFailed"));
+        }
+        return userRepository.findByUser(SecurityUtils.appContextAuthentication().getUserId());
+    }*/
 
-    private String generateJwtToken(User user){
-        String jwt = null;
-        JwtClaims jwtClaims = new JwtClaims();
-        jwtClaims.claim(JwtConstants.JWT_CLAIM_USER_ID, user.getUser());
-        jwtClaims.claim(JwtConstants.JWT_CLAIM_EMAIL_ADDRESS, user.getEmail());
-        return jwt = jwtUtil.sign(jwtClaims, 3600* 24 * 7);
-    }
+
+
 }

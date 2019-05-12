@@ -1,5 +1,7 @@
 package com.chris.scoreapi.sport;
 
+import com.chris.scoreapi.user.AuthenticationService;
+import com.chris.scoreapi.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,9 @@ public class SportController {
 
     @Autowired
     private SportService sportService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     //----GET----
     @GetMapping(value = "/all")
@@ -33,7 +38,7 @@ public class SportController {
     //TODO : USE DAO to communicate with FE
     @RequestMapping(value = "", method = RequestMethod.POST)
     public @ResponseBody SportResponse addNewSport(@RequestBody SportRequest request){
-
+        //User user = authenticationService.getCurrentUser();
         return new SportResponse(sportService.addSport(request));
     }
 }
