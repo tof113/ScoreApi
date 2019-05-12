@@ -55,13 +55,12 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
+
     private String generateJwtToken(User user){
         String jwt = null;
         JwtClaims jwtClaims = new JwtClaims();
         jwtClaims.claim(JwtConstants.JWT_CLAIM_USER_ID, user.getUser());
         jwtClaims.claim(JwtConstants.JWT_CLAIM_EMAIL_ADDRESS, user.getEmail());
         return jwt = jwtUtil.sign(jwtClaims, 3600* 24 * 7);
-
-
     }
 }

@@ -8,6 +8,6 @@ public class JwtConstants {
     public static final String JWT_ISSUER = "R1D2";
     public static final String JWT_AUDIANCE_USERS = "R1D2/isers";
 
-    public static final String JWT_CLAIM_USER_ID = "dto";
+    public static final String JWT_CLAIM_USER_ID = "userId";
     public static final String JWT_CLAIM_EMAIL_ADDRESS = "email";
 }
