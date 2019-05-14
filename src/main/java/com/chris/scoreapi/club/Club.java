@@ -22,7 +22,7 @@ public class Club extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int club;
+    private Integer club;
 
     @NonNull
     private String name;
@@ -32,28 +32,40 @@ public class Club extends BaseEntity {
     private String photo;
 
     //Relation many-to-many with User
-    @ManyToMany(mappedBy = "clubs")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "clubs")
     private Set<User> users = new HashSet<>();
 
     //Relation many-to-many with Sport
-    @ManyToMany(mappedBy = "clubs")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "clubs")
     private Set<Sport> sports = new HashSet<>();
 
     //Relation One-to-Many with Player
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Player> players;
 
     //Relation One-to-Many with Team
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Team> teams;
 
     //Relation One-to-Many with Season
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Season> seasons;
 
     //Relation One-to-Many with Game
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Game> games;
+
+    public Club(User user, ClubDto dto ){
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.photo = dto.getPhoto();
+        this.users.add(user);
+    }
+
+    @Override
+    public String toString(){
+        return name;
+    }
 
 
 

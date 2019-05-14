@@ -18,10 +18,13 @@ public class AuthenticationService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
 
     public User signin(LoginRequest request) {
 
-        User user = userRepository.findByEmail(request.getUsername());
+        User user = userRepository.findByUsername(request.getUsername());
 
         if(user == null){
             throw new AuthenticationException("email not correct");
@@ -35,18 +38,20 @@ public class AuthenticationService {
 
     public User signup(SignUpRequest request) {
 
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByUsername(request.getUsername());
         if(user != null){
             throw new IllegalArgumentException("Email already in use");
         }
         user = new User();
         user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPassword(PasswordEncrypt.getHashFromString(request.getPassword()));
-        user.setAdmin(request.isAdmin());
-
+        Role role = roleRepository.findByName(request.getRole());
+        if(role == null){
+            role = roleRepository.save(new Role(request.getRole()));
+        }
+        user.getRoles().add(role);
         return userRepository.save(user);
     }
 

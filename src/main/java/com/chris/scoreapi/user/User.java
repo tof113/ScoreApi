@@ -24,6 +24,7 @@ public class User extends BaseEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer user;
 
+    //is email
     @NonNull
     private String username;
 
@@ -34,16 +35,21 @@ public class User extends BaseEntity implements UserDetails {
     private String firstName;
 
     @NonNull
-    private String email;
-
-    @NonNull
     private String password;
 
-    @NonNull
-    private boolean admin;
+
+
+    //Relation many-to-many with Role
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "User_Role",
+            joinColumns = {@JoinColumn(name = "user")},
+            inverseJoinColumns = {@JoinColumn(name = "role")}
+    )
+    private Set<Role> roles = new HashSet<>();
 
     //Relation many-to-many with Club
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "User_Club",
             joinColumns = {@JoinColumn(name = "user")},
@@ -51,15 +57,17 @@ public class User extends BaseEntity implements UserDetails {
     )
     private Set<Club> clubs = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
+        return this.roles.stream().map(role-> new SimpleGrantedAuthority("ROLE_"+role.getName())).collect(toList());
     }
 
+    @Override
+    public String toString(){
+        return username;
+    }
     @Override
     public boolean isAccountNonExpired() {
         return true;

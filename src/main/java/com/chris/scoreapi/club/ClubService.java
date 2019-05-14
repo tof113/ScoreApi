@@ -1,5 +1,6 @@
 package com.chris.scoreapi.club;
 
+import com.chris.scoreapi.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,11 @@ public class ClubService {
         return clubRepository.findAll();
     }
 
-    public Club createClub(ClubDto request){
+    public Club createClub(User user, ClubDto request){
 
-    return null;
+        Club club = new Club(user, request);
+        club = clubRepository.save(club);
+
+    return club;
     }
 }

@@ -1,5 +1,6 @@
 package com.chris.scoreapi.common.security;
 
+import com.chris.scoreapi.user.Role;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class JwtTokenProvider {
@@ -29,10 +31,11 @@ public class JwtTokenProvider {
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
-    public String createToken(String userId, String email, String username) {
+
+    public String createToken(String userId, String username, Set<Role> roles) {
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("email", email);
         claims.put("userId", userId);
+        claims.put("roles", roles);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
         return Jwts.builder()//

@@ -20,12 +20,11 @@ public class SignUpRequest {
     @NonNull
     private String username;
 
-    @NonNull
-    private String email;
 
     @NonNull
     private String password;
 
-    private boolean admin;
+    @NonNull
+    private String role;
 
 }
