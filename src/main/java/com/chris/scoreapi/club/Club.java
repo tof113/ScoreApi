@@ -32,27 +32,27 @@ public class Club extends BaseEntity {
     private String photo;
 
     //Relation many-to-many with User
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "clubs")
+    @ManyToMany( mappedBy = "clubs")
     private Set<User> users = new HashSet<>();
 
     //Relation many-to-many with Sport
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "clubs")
+    @ManyToMany( mappedBy = "clubs")
     private Set<Sport> sports = new HashSet<>();
 
     //Relation One-to-Many with Player
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Player> players;
 
     //Relation One-to-Many with Team
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Team> teams;
 
     //Relation One-to-Many with Season
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Season> seasons;
 
     //Relation One-to-Many with Game
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private Set<Game> games;
 
     public Club(User user, ClubDto dto ){

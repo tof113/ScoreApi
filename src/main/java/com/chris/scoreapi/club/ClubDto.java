@@ -20,13 +20,12 @@ public class ClubDto {
 
     private String photo;
 
-    private Set<User> users;
+    private Set<Integer> users;
 
     public ClubDto(Club club ){
         this.club = club.getClub();
         this.name = club.getName();
         this.description = club.getDescription();
         this.photo = club.getPhoto();
-        this.users = club.getUsers();
     }
 }

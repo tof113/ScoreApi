@@ -11,6 +11,7 @@ import sun.rmi.runtime.Log;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
+import java.util.List;
 
 @Service
 public class AuthenticationService {
@@ -38,6 +39,8 @@ public class AuthenticationService {
 
     public User signup(SignUpRequest request) {
 
+        List<User> list =userRepository.findAll();
+
         User user = userRepository.findByUsername(request.getUsername());
         if(user != null){
             throw new IllegalArgumentException("Email already in use");
@@ -48,21 +51,12 @@ public class AuthenticationService {
         user.setLastName(request.getLastName());
         user.setPassword(PasswordEncrypt.getHashFromString(request.getPassword()));
         Role role = roleRepository.findByName(request.getRole());
+
         if(role == null){
-            role = roleRepository.save(new Role(request.getRole()));
+            role = new Role(request.getRole());
         }
         user.getRoles().add(role);
         return userRepository.save(user);
     }
-
-    /*public User getCurrentUser(){
-        AppContext appContext = SecurityUtils.appContextAuthentication();
-        if(appContext == null){
-            throw new AuthenticationException(Translator.toLocale("authenticationFailed"));
-        }
-        return userRepository.findByUser(SecurityUtils.appContextAuthentication().getUserId());
-    }*/
-
-
 
 }

@@ -1,5 +1,6 @@
 package com.chris.scoreapi.user;
 
+import com.auth0.jwt.internal.com.fasterxml.jackson.annotation.JsonIgnore;
 import com.chris.scoreapi.club.Club;
 import com.chris.scoreapi.common.entity.BaseEntity;
 import lombok.*;
@@ -37,7 +38,10 @@ public class User extends BaseEntity implements UserDetails {
     @NonNull
     private String password;
 
-
+    @Override
+    public int hashCode() {
+        return  username.hashCode();
+    }
 
     //Relation many-to-many with Role
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
@@ -48,8 +52,9 @@ public class User extends BaseEntity implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
+
     //Relation many-to-many with Club
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "User_Club",
             joinColumns = {@JoinColumn(name = "user")},

@@ -6,6 +6,7 @@ import lombok.NonNull;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,10 +23,20 @@ public class Role {
     private String name;
 
     //Relation many-to-many with User
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
     public Role(String name){
         this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        return  name.hashCode();
+    }
+
+    @Override
+    public String toString(){
+        return "id : "+ role.toString() + " | name : "+name;
     }
 }

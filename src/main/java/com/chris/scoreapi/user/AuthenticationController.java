@@ -25,7 +25,7 @@ public class AuthenticationController {
 
     //-----LOGIN-----
     @PostMapping(value = "/signin")
-    public @ResponseBody String   signin(@RequestBody LoginRequest request){
+    public @ResponseBody JwtResponse   signin(@RequestBody LoginRequest request){
         User user = authenticationService.signin(request);
         String token = jwtTokenProvider.createToken(user.getUser().toString(), user.getUsername(), user.getRoles());
 
@@ -37,7 +37,7 @@ public class AuthenticationController {
         response.setToken(token);
         response.setId(user.getUser().toString());
         response.setUsername(user.getUsername());
-        return "bib";
+        return response;
 
     }
 

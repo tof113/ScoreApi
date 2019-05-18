@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping(value = "/club")
@@ -19,22 +21,39 @@ public class ClubController {
     private ClubService clubService;
 
     @GetMapping(value ="/all")
-    public @ResponseBody Iterable<Club> getClubs(){
+    public ResponseEntity<Object> getClubs(){
         Iterable<Club> clubs = clubService.getClubs();
-
-        return clubs;
-
+        Set<ClubDto> response = new HashSet<>();
+        for(Club c : clubs){
+            response.add(new ClubDto(c));
+        }
+        return new ResponseEntity<>( response, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/createClub")
+    @GetMapping(value ="", params = "name")
+    public ResponseEntity<Object> getClubByName(@RequestParam String name){
+        Club club = clubService.getClubByName(name);
+        ClubDto response = new ClubDto(club);
+        return new ResponseEntity<>( response, HttpStatus.OK);
+    }
+
+    @GetMapping(value ="", params = "id")
+    public ResponseEntity<Object> getClubById(@RequestParam Integer id){
+        Club club = clubService.getClubById(id);
+        ClubDto response = new ClubDto(club);
+        return new ResponseEntity<>( response, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "")
     public ResponseEntity<Object> createClub(@RequestBody ClubDto request){
         try{
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Club club = clubService.createClub(user, request);
-            return new ResponseEntity<>(club, HttpStatus.OK);
+            ClubDto response = new ClubDto(club);
+            return new ResponseEntity<>( response, HttpStatus.OK);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return null;
         }
     }
 
